@@ -1,0 +1,62 @@
+[
+  {
+    "email": "aarav@skilledin.com",
+    "password": "1234",
+    "phone": "9876543210",
+    "linkedin": "linkedin.com/in/aarav",
+    "github": "github.com/aarav-ai",
+    "bio": "AI engineer helping startups scale with ML solutions.",
+    "skills": ["AI & Machine Learning", "Python", "Deep Learning"],
+    "credits": 132,
+    "location": "Bangalore",
+    "earnings": 480000
+  },
+  {
+    "email": "meera@skilledin.com",
+    "password": "1234",
+    "phone": "9123456780",
+    "linkedin": "linkedin.com/in/meera",
+    "github": "github.com/meera-web",
+    "bio": "Full-stack developer crafting scalable platforms.",
+    "skills": ["Web Development", "React", "Node.js"],
+    "credits": 118,
+    "location": "Chennai",
+    "earnings": 350000
+  },
+  {
+    "email": "rohan@skilledin.com",
+    "password": "1234",
+    "phone": "9012345678",
+    "linkedin": "linkedin.com/in/rohan-cloud",
+    "github": "github.com/rohan-devops",
+    "bio": "Cloud architect and DevOps specialist.",
+    "skills": ["Cloud Computing", "DevOps Engineering"],
+    "credits": 121,
+    "location": "Hyderabad",
+    "earnings": 420000
+  },
+  {
+    "email": "sara@skilledin.com",
+    "password": "1234",
+    "phone": "9988776655",
+    "linkedin": "linkedin.com/in/sara-design",
+    "github": "",
+    "bio": "UX designer creating intuitive digital experiences.",
+    "skills": ["UI/UX Design", "Graphic Design"],
+    "credits": 95,
+    "location": "Mumbai",
+    "earnings": 275000
+  },
+  {
+    "email": "vikram@skilledin.com",
+    "password": "1234",
+    "phone": "9876123456",
+    "linkedin": "linkedin.com/in/vikram-sec",
+    "github": "",
+    "bio": "Cybersecurity expert securing enterprise systems.",
+    "skills": ["Cybersecurity"],
+    "credits": 102,
+    "location": "Delhi",
+    "earnings": 390000
+  }
+]

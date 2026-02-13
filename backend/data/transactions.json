@@ -1,0 +1,29 @@
+[
+  {
+    "email": "aarav@skilledin.com",
+    "skill_given": "Machine Learning Mentorship",
+    "skill_received": "Cloud Deployment",
+    "rating": 5,
+    "verified": true,
+    "credits_earned": 45,
+    "timestamp": "2026-02-01"
+  },
+  {
+    "email": "meera@skilledin.com",
+    "skill_given": "React Workshop",
+    "skill_received": "UI Design Feedback",
+    "rating": 4,
+    "verified": true,
+    "credits_earned": 40,
+    "timestamp": "2026-02-03"
+  },
+  {
+    "email": "rohan@skilledin.com",
+    "skill_given": "AWS Deployment",
+    "skill_received": "DevOps Automation",
+    "rating": 5,
+    "verified": true,
+    "credits_earned": 45,
+    "timestamp": "2026-02-05"
+  }
+]

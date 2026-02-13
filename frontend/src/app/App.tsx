@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { HomePage } from './components/HomePage';
-import { AuthPage } from './components/AuthPage';
+import  HomePage  from './components/HomePage';
+import  AuthPage  from './components/AuthPage';
 import { MainInterface } from './components/MainInterface';
 import { Toaster } from './components/ui/sonner';
 

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Home, Search, ArrowRightLeft, Bot, UserCircle } from 'lucide-react';
-import { HomeTab } from './HomeTab';
-import { SearchSkills } from './SearchSkills';
-import { TransactionLedger } from './TransactionLedger';
-import { AIChatbot } from './AIChatbot';
-import { AccountDetails } from './AccountDetails';
+import HomeTab from './HomeTab';
+import  SearchSkills  from './SearchSkills';
+import TransactionLedger  from './TransactionLedger';
+import AIChatbot from './AIChatbot';
+import AccountDetails from './AccountDetails';
 
 type Tab = 'home' | 'search' | 'ledger' | 'chatbot' | 'account';
 
@@ -23,9 +23,9 @@ export function MainInterface() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
       {/* Content Area */}
       <div className="max-w-7xl mx-auto">
-        {activeTab === 'home' && <HomeTab />}
+        {activeTab === 'home' && <HomeTab user={undefined} />}
         {activeTab === 'search' && <SearchSkills />}
-        {activeTab === 'ledger' && <TransactionLedger />}
+        {activeTab === 'ledger' && <TransactionLedger user={undefined} />}
         {activeTab === 'chatbot' && <AIChatbot />}
         {activeTab === 'account' && <AccountDetails />}
       </div>
