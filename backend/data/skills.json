@@ -1,0 +1,17 @@
+[
+  { "id": 1, "name": "AI & Machine Learning", "category": "Technology", "avg_income": 120000, "providers": 85, "demand_index": 96 },
+  { "id": 2, "name": "Web Development", "category": "Technology", "avg_income": 75000, "providers": 128, "demand_index": 92 },
+  { "id": 3, "name": "Cloud Computing", "category": "Technology", "avg_income": 95000, "providers": 73, "demand_index": 90 },
+  { "id": 4, "name": "Cybersecurity", "category": "Technology", "avg_income": 110000, "providers": 64, "demand_index": 89 },
+  { "id": 5, "name": "UI/UX Design", "category": "Design", "avg_income": 65000, "providers": 140, "demand_index": 85 },
+  { "id": 6, "name": "Blockchain Development", "category": "Technology", "avg_income": 130000, "providers": 41, "demand_index": 88 },
+  { "id": 7, "name": "Data Science", "category": "Technology", "avg_income": 115000, "providers": 98, "demand_index": 94 },
+  { "id": 8, "name": "Mobile App Development", "category": "Technology", "avg_income": 80000, "providers": 110, "demand_index": 86 },
+  { "id": 9, "name": "DevOps Engineering", "category": "Technology", "avg_income": 105000, "providers": 69, "demand_index": 91 },
+  { "id": 10, "name": "Digital Marketing", "category": "Marketing", "avg_income": 60000, "providers": 155, "demand_index": 82 },
+  { "id": 11, "name": "Content Writing", "category": "Marketing", "avg_income": 45000, "providers": 200, "demand_index": 78 },
+  { "id": 12, "name": "Graphic Design", "category": "Design", "avg_income": 55000, "providers": 170, "demand_index": 80 },
+  { "id": 13, "name": "Video Editing", "category": "Media", "avg_income": 70000, "providers": 92, "demand_index": 84 },
+  { "id": 14, "name": "Financial Analysis", "category": "Finance", "avg_income": 90000, "providers": 52, "demand_index": 83 },
+  { "id": 15, "name": "Game Development", "category": "Technology", "avg_income": 98000, "providers": 47, "demand_index": 87 }
+]

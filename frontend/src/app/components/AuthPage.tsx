@@ -1,204 +1,190 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { BookMarked, ArrowLeft } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { BookMarked, ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
+import { User } from "../App";
+
+const API = "http://127.0.0.1:5000/api";
 
 interface AuthPageProps {
   onBack: () => void;
-  onLogin: (email: string) => void;
+  onLogin: (user: User) => void;
 }
 
-export function AuthPage({ onBack, onLogin }: AuthPageProps) {
+export default function AuthPage({ onBack, onLogin }: AuthPageProps) {
   const [isSignIn, setIsSignIn] = useState(true);
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const validateEmail = (email: string) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const validateMobile = (mobile: string) => {
-    const re = /^[0-9]{10}$/;
-    return re.test(mobile);
-  };
+  const validateMobile = (mobile: string) =>
+    /^[0-9]{10}$/.test(mobile);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email && !mobile) {
-      toast.error('Please enter email or mobile number');
-      return;
-    }
-
-    if (email && !validateEmail(email)) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
-
-    if (mobile && !validateMobile(mobile)) {
-      toast.error('Please enter a valid 10-digit mobile number');
+    if (!email || !validateEmail(email)) {
+      toast.error("Valid email is required");
       return;
     }
 
     if (!password) {
-      toast.error('Please enter a password');
+      toast.error("Password is required");
       return;
     }
 
     if (!isSignIn) {
-      if (password !== confirmPassword) {
-        toast.error('Passwords do not match');
+      if (!mobile || !validateMobile(mobile)) {
+        toast.error("Valid 10-digit mobile required");
         return;
       }
+
       if (password.length < 6) {
-        toast.error('Password must be at least 6 characters');
+        toast.error("Password must be at least 6 characters");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match");
         return;
       }
     }
 
-    // Successful authentication
-    toast.success(isSignIn ? 'Welcome back to SkilledIn!' : 'Account created successfully!');
-    onLogin(email || mobile);
-  };
+    setLoading(true);
 
-  const handleForgotPassword = () => {
-    if (!email && !mobile) {
-      toast.error('Please enter your email or mobile number first');
-      return;
+    try {
+      const endpoint = isSignIn ? "/login" : "/register";
+
+      const res = await fetch(`${API}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          mobile,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || "Authentication failed");
+        setLoading(false);
+        return;
+      }
+
+      // Expect backend to return: { user: { email, name, credits } }
+      const user: User = data.user;
+
+      toast.success(
+        isSignIn
+          ? "Welcome back to SkilledIn!"
+          : "Account created successfully!"
+      );
+
+      onLogin(user);
+    } catch (err) {
+      toast.error("Server connection failed");
     }
-    toast.success('Password reset link sent!');
+
+    setLoading(false);
   };
 
   return (
-    <div 
-      className="min-h-screen bg-cover bg-center bg-no-repeat relative"
-      style={{
-        backgroundImage: 'url(https://images.unsplash.com/photo-1600499273056-52b8a9f6859f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaWJyYXJ5JTIwaW50ZXJpb3IlMjBhcmNoaXRlY3R1cmV8ZW58MXx8fHwxNzcwOTY0ODIyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral)',
-      }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-amber-950/70 backdrop-blur-sm" />
+    <div className="min-h-screen bg-amber-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          {/* Back Button */}
-          <Button
-            variant="ghost"
-            onClick={onBack}
-            className="mb-4 text-amber-200 hover:text-amber-50 hover:bg-amber-900/30"
-          >
-            <ArrowLeft className="mr-2" size={20} />
-            Back to Library
-          </Button>
+        <Button
+          variant="ghost"
+          onClick={onBack}
+          className="mb-4 text-amber-200"
+        >
+          <ArrowLeft className="mr-2" size={20} />
+          Back to Library
+        </Button>
 
-          {/* Auth Card */}
-          <div className="bg-amber-50 rounded-lg shadow-2xl p-8 border-4 border-amber-900/30">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <BookMarked className="mx-auto mb-4 text-amber-700" size={48} />
-              <h1 className="text-3xl font-serif text-amber-900 mb-2">
-                {isSignIn ? 'Welcome Back' : 'Join SkilledIn'}
-              </h1>
-              <p className="text-amber-700">
-                {isSignIn ? 'Sign in to access your learning library' : 'Create your reader account'}
-              </p>
+        <div className="bg-amber-50 rounded-lg shadow-2xl p-8 border-4 border-amber-900/30">
+          <div className="text-center mb-6">
+            <BookMarked className="mx-auto mb-3 text-amber-700" size={40} />
+            <h1 className="text-2xl font-serif text-amber-900">
+              {isSignIn ? "Welcome Back" : "Join SkilledIn"}
+            </h1>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+
+            <div>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {!isSignIn && (
               <div>
-                <Label htmlFor="email" className="text-amber-900">Email</Label>
+                <Label>Mobile</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="border-amber-300 focus:border-amber-600"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="mobile" className="text-amber-900">Mobile Number</Label>
-                <Input
-                  id="mobile"
                   type="tel"
-                  placeholder="1234567890"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
-                  className="border-amber-300 focus:border-amber-600"
                 />
               </div>
+            )}
 
-              <div>
-                <Label htmlFor="password" className="text-amber-900">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border-amber-300 focus:border-amber-600"
-                />
-              </div>
-
-              {!isSignIn && (
-                <div>
-                  <Label htmlFor="confirmPassword" className="text-amber-900">Confirm Password</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="Confirm your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="border-amber-300 focus:border-amber-600"
-                  />
-                </div>
-              )}
-
-              {isSignIn && (
-                <div className="text-right">
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
-                    className="text-sm text-amber-700 hover:text-amber-900 underline"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full bg-amber-700 hover:bg-amber-800 text-amber-50"
-                size="lg"
-              >
-                {isSignIn ? 'Sign In' : 'Sign Up'}
-              </Button>
-            </form>
-
-            {/* Toggle between Sign In and Sign Up */}
-            <div className="mt-6 text-center">
-              <p className="text-amber-700">
-                {isSignIn ? "Don't have an account? " : 'Already have an account? '}
-                <button
-                  onClick={() => {
-                    setIsSignIn(!isSignIn);
-                    setPassword('');
-                    setConfirmPassword('');
-                  }}
-                  className="text-amber-900 font-semibold hover:underline"
-                >
-                  {isSignIn ? 'Sign Up' : 'Sign In'}
-                </button>
-              </p>
+            <div>
+              <Label>Password</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
+
+            {!isSignIn && (
+              <div>
+                <Label>Confirm Password</Label>
+                <Input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full bg-amber-700 text-white"
+              disabled={loading}
+            >
+              {loading
+                ? "Processing..."
+                : isSignIn
+                ? "Sign In"
+                : "Sign Up"}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-amber-700">
+              {isSignIn
+                ? "Don't have an account?"
+                : "Already have an account?"}{" "}
+              <button
+                onClick={() => setIsSignIn(!isSignIn)}
+                className="font-semibold underline"
+              >
+                {isSignIn ? "Sign Up" : "Sign In"}
+              </button>
+            </p>
           </div>
         </div>
       </div>

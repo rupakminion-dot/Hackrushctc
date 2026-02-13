@@ -1,51 +1,45 @@
-import { useState } from 'react';
-import { HomePage } from './components/HomePage';
-import { AuthPage } from './components/AuthPage';
-import { MainInterface } from './components/MainInterface';
-import { Toaster } from './components/ui/sonner';
+import { useState } from "react";
+import HomePage from "./components/HomePage";
+import AuthPage from "./components/AuthPage";
+import MainInterface from "./components/MainInterface";
+import { Toaster } from "./components/ui/sonner";
 
-type Screen = 'home' | 'auth' | 'main';
+type Screen = "home" | "auth" | "main";
+
+export interface User {
+  email: string;
+  name?: string;
+  credits?: number;
+}
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
-  const [selectedSkill, setSelectedSkill] = useState<string>('');
+  const [currentScreen, setCurrentScreen] = useState<Screen>("home");
+  const [user, setUser] = useState<User | null>(null);
 
-  const handleNavigateToAuth = () => {
-    setCurrentScreen('auth');
-  };
-
-  const handleNavigateToSkill = (skillName: string) => {
-    setSelectedSkill(skillName);
-    setCurrentScreen('auth'); // For now, navigate to auth. In production, this would go to a skill detail page
-  };
-
-  const handleLogin = (email: string) => {
-    console.log('User logged in:', email);
-    setCurrentScreen('main');
-  };
-
-  const handleBackToHome = () => {
-    setCurrentScreen('home');
+  const handleLogin = (loggedInUser: User) => {
+    console.log("User logged in:", loggedInUser);
+    setUser(loggedInUser);
+    setCurrentScreen("main");
   };
 
   return (
     <>
-      {currentScreen === 'home' && (
+      {currentScreen === "home" && (
         <HomePage
-          onNavigateToAuth={handleNavigateToAuth}
-          onNavigateToSkill={handleNavigateToSkill}
+          onNavigateToAuth={() => setCurrentScreen("auth")}
+          onNavigateToSkill={() => setCurrentScreen("auth")}
         />
       )}
-      
-      {currentScreen === 'auth' && (
+
+      {currentScreen === "auth" && (
         <AuthPage
-          onBack={handleBackToHome}
+          onBack={() => setCurrentScreen("home")}
           onLogin={handleLogin}
         />
       )}
-      
-      {currentScreen === 'main' && (
-        <MainInterface />
+
+      {currentScreen === "main" && user && (
+        <MainInterface user={user} />
       )}
 
       <Toaster />
