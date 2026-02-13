@@ -142,7 +142,7 @@ def leaderboard():
     return jsonify(sorted_users)
 
 
-# ---------- AI CHAT ---------- #
+# ---------- AI CHAT ---------- #ada
 
 @app.route("/api/ai-chat", methods=["POST"])
 def ai_chat():
