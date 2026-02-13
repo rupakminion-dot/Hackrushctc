@@ -111,6 +111,8 @@ def add_transaction():
 
     data["credits_earned"] = credit
     data["timestamp"] = str(datetime.now())
+    data["status"] = data.get("status", "completed")
+
 
     transactions.append(data)
 

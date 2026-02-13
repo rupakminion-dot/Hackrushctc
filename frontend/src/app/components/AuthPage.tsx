@@ -4,12 +4,13 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { BookMarked, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { User } from "../App";
 
 const API = "http://127.0.0.1:5000/api";
 
 interface AuthPageProps {
   onBack: () => void;
-  onLogin: (user: any) => void;
+  onLogin: (user: User) => void;
 }
 
 export default function AuthPage({ onBack, onLogin }: AuthPageProps) {
@@ -29,13 +30,8 @@ export default function AuthPage({ onBack, onLogin }: AuthPageProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email) {
-      toast.error("Email is required");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error("Invalid email format");
+    if (!email || !validateEmail(email)) {
+      toast.error("Valid email is required");
       return;
     }
 
@@ -45,6 +41,11 @@ export default function AuthPage({ onBack, onLogin }: AuthPageProps) {
     }
 
     if (!isSignIn) {
+      if (!mobile || !validateMobile(mobile)) {
+        toast.error("Valid 10-digit mobile required");
+        return;
+      }
+
       if (password.length < 6) {
         toast.error("Password must be at least 6 characters");
         return;
@@ -59,42 +60,36 @@ export default function AuthPage({ onBack, onLogin }: AuthPageProps) {
     setLoading(true);
 
     try {
-      if (isSignIn) {
-        const res = await fetch(`${API}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
+      const endpoint = isSignIn ? "/login" : "/register";
 
-        const data = await res.json();
+      const res = await fetch(`${API}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          mobile,
+          password,
+        }),
+      });
 
-        if (!res.ok) {
-          toast.error(data.error || "Login failed");
-        } else {
-          toast.success("Welcome back to SkilledIn!");
-          onLogin(data.user);
-        }
-      } else {
-        const res = await fetch(`${API}/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            mobile,
-            password,
-            credits: 5,
-          }),
-        });
+      const data = await res.json();
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          toast.error(data.error || "Registration failed");
-        } else {
-          toast.success("Account created successfully!");
-          onLogin({ email });
-        }
+      if (!res.ok) {
+        toast.error(data.error || "Authentication failed");
+        setLoading(false);
+        return;
       }
+
+      // Expect backend to return: { user: { email, name, credits } }
+      const user: User = data.user;
+
+      toast.success(
+        isSignIn
+          ? "Welcome back to SkilledIn!"
+          : "Account created successfully!"
+      );
+
+      onLogin(user);
     } catch (err) {
       toast.error("Server connection failed");
     }

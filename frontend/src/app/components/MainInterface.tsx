@@ -1,54 +1,59 @@
-import { useState } from 'react';
-import { Home, Search, ArrowRightLeft, Bot, UserCircle } from 'lucide-react';
-import HomeTab from './HomeTab';
-import  SearchSkills  from './SearchSkills';
-import TransactionLedger  from './TransactionLedger';
-import AIChatbot from './AIChatbot';
-import AccountDetails from './AccountDetails';
+import { useState } from "react";
+import { Home, Search, ArrowRightLeft, Bot, UserCircle } from "lucide-react";
 
-type Tab = 'home' | 'search' | 'ledger' | 'chatbot' | 'account';
+import HomeTab from "./HomeTab";
+import SearchSkills from "./SearchSkills";
+import TransactionLedger from "./TransactionLedger";
+import AIChatbot from "./AIChatbot";
+import AccountDetails from "./AccountDetails";
+import { User } from "../App";
 
-export function MainInterface() {
-  const [activeTab, setActiveTab] = useState<Tab>('home');
+type Tab = "home" | "search" | "ledger" | "chatbot" | "account";
+
+export default function MainInterface({ user }: { user: User }) {
+  const [activeTab, setActiveTab] = useState<Tab>("home");
 
   const navItems = [
-    { id: 'home' as Tab, icon: Home, label: 'Home' },
-    { id: 'search' as Tab, icon: Search, label: 'Search' },
-    { id: 'ledger' as Tab, icon: ArrowRightLeft, label: 'Ledger' },
-    { id: 'chatbot' as Tab, icon: Bot, label: 'AI Chat' },
-    { id: 'account' as Tab, icon: UserCircle, label: 'Account' },
+    { id: "home" as Tab, icon: Home, label: "Home" },
+    { id: "search" as Tab, icon: Search, label: "Search" },
+    { id: "ledger" as Tab, icon: ArrowRightLeft, label: "Ledger" },
+    { id: "chatbot" as Tab, icon: Bot, label: "AI Chat" },
+    { id: "account" as Tab, icon: UserCircle, label: "Account" },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
-      {/* Content Area */}
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 pb-20">
+
+      {/* Content */}
       <div className="max-w-7xl mx-auto">
-        {activeTab === 'home' && <HomeTab user={undefined} />}
-        {activeTab === 'search' && <SearchSkills />}
-        {activeTab === 'ledger' && <TransactionLedger user={undefined} />}
-        {activeTab === 'chatbot' && <AIChatbot />}
-        {activeTab === 'account' && <AccountDetails />}
+        {activeTab === "home" && <HomeTab user={user} />}
+        {activeTab === "search" && <SearchSkills />}
+        {activeTab === "ledger" && <TransactionLedger user={user} />}
+        {activeTab === "chatbot" && <AIChatbot />}
+        {activeTab === "account" && <AccountDetails user={user} />}
       </div>
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-amber-700 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-around items-center">
+          <div className="flex justify-around items-center relative">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
+
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`flex flex-col items-center py-3 px-4 transition-all ${
+                  className={`relative flex flex-col items-center py-3 px-4 transition-all ${
                     isActive
-                      ? 'text-amber-700 font-semibold'
-                      : 'text-amber-500 hover:text-amber-700'
+                      ? "text-amber-700 font-semibold"
+                      : "text-amber-500 hover:text-amber-700"
                   }`}
                 >
-                  <Icon size={24} className={isActive ? 'mb-1' : 'mb-1'} />
+                  <Icon size={24} className="mb-1" />
                   <span className="text-xs">{item.label}</span>
+
                   {isActive && (
                     <div className="absolute bottom-0 w-12 h-1 bg-amber-700 rounded-t-full" />
                   )}
